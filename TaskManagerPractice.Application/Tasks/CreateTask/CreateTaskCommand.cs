@@ -6,5 +6,5 @@ using TaskManagerPractice.Domain.Users;
 using Task = TaskManagerPractice.Domain.Tasks.Task;
 namespace TaskManagerPractice.Application.Tasks.CreateTask;
 
-public record CreateTaskCommand(string Name, UserId UserId, string Description, DateTime CreatedAt)
-    : IRequest<Result<TaskId>>;
+public record CreateTaskCommand(string Name, Guid UserId, string Description)
+    : IRequest<Result<Task>>;

@@ -7,5 +7,6 @@ public interface IUsersRepository
     Task AddAsync(User user, CancellationToken cancellationToken);
     Task UpdateAsync(User user, CancellationToken cancellationToken);
     Task DeleteAsync(UserId userId, CancellationToken cancellationToken);
-    Task<bool> ExistsAsync(UserName userName, CancellationToken cancellationToken);
+    Task<bool> ExistsByNameAsync(UserName userName, CancellationToken cancellationToken);
+    Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken);
 }

@@ -15,8 +15,8 @@ public static class UsersEndpoints
             return Results.Ok(users);
         });
         
-        app.MapGet("/users/{id}", async (IUsersRepository repository,
-            Guid id, CancellationToken cancellationToken) =>
+        app.MapGet("/users/{id}", async (Guid id, IUsersRepository repository,
+             CancellationToken cancellationToken) =>
         {
             var user = await repository.GetByIdAsync(new UserId(id), cancellationToken);
             return user is null ? Results.NotFound() : Results.Ok(user);
@@ -26,7 +26,7 @@ public static class UsersEndpoints
             IMediator mediator, CancellationToken cancellationToken) =>
         {
             var result = await mediator.Send(command, cancellationToken);
-            return result.IsSuccess ? Results.Created($"/users/{result.Value!.Value}", result) 
+            return result.IsSuccess ? Results.Created($"/users/{result.Value!.Id}", result.Value) 
                 : Results.BadRequest(result.Error);
         });
     }

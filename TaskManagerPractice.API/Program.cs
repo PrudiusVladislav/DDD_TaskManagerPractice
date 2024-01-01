@@ -5,6 +5,7 @@ using TaskManagerPractice.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.Services.AddTransient<ErrorHandlingMiddleware>();
     builder.Services.AddPersistence(builder.Configuration);
     builder.Services.AddApplication();
 }

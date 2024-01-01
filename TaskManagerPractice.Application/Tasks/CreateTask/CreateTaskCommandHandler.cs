@@ -8,7 +8,7 @@ using CustomTask = TaskManagerPractice.Domain.Tasks.Task;
 
 namespace TaskManagerPractice.Application.Tasks.CreateTask;
 
-public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Result<TaskId>>
+public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Result<CustomTask>>
 {
     private readonly ITasksRepository _tasksRepository;
     private readonly IUsersRepository _usersRepository;
@@ -19,20 +19,25 @@ public class CreateTaskCommandHandler: IRequestHandler<CreateTaskCommand, Result
         _usersRepository = usersRepository;
     }
     
-    public async Task<Result<TaskId>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CustomTask>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetByIdAsync(request.UserId, cancellationToken);
+        var userId = new UserId(request.UserId);
+        var user = await _usersRepository.GetByIdAsync(userId, cancellationToken);
 
         if (user is null) 
-            return Result<TaskId>.Fail("User not found");
+            return Result<CustomTask>.Fail("User not found");
+        
+        var userTasks = await _tasksRepository.GetByUserIdAsync(userId, cancellationToken);
+        if (userTasks.Any(task => task.Name == request.Name))
+            return Result<CustomTask>.Fail("Task with this name is already assigned to this user");
         
         var task = CustomTask.Create(
             TypedIdBase.New<TaskId>(),
             request.Name, 
-            request.UserId,
+            userId,
             request.Description,
-            request.CreatedAt);
+            DateTime.Now);
         await _tasksRepository.AddAsync(task, cancellationToken);
-        return Result<TaskId>.Ok(task.Id);
+        return Result<CustomTask>.Ok(task);
     }
 }

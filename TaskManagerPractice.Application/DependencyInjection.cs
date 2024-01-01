@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TaskManagerPractice.Application.Shared;
 
 namespace TaskManagerPractice.Application;
 
@@ -13,6 +14,8 @@ public static class DependencyInjection
             // options.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
             // options.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
+        
+        services.AddTransient<IMapper, Mapper>();
         return services;
     }
 }

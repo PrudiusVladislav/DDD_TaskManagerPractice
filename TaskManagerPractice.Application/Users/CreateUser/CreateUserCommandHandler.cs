@@ -5,7 +5,7 @@ using TaskManagerPractice.Domain.Users;
 
 namespace TaskManagerPractice.Application.Users.CreateUser;
 
-public class CreateUserCommandHandler: IRequestHandler<CreateUserCommand, Result<UserId>>
+public class CreateUserCommandHandler: IRequestHandler<CreateUserCommand, Result<User>>
 {
     private readonly IUsersRepository _usersRepository;
     
@@ -14,18 +14,22 @@ public class CreateUserCommandHandler: IRequestHandler<CreateUserCommand, Result
         _usersRepository = usersRepository;
     }
     
-    public async Task<Result<UserId>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<User>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var userName = UserName.Create(request.Name);
-        if (await _usersRepository.ExistsAsync(userName, cancellationToken))
+        if (await _usersRepository.ExistsByNameAsync(userName, cancellationToken))
         {
-            return Result<UserId>.Fail($"User with name {userName} already exists");
+            return Result<User>.Fail($"User with name {userName.Value} already exists");
         }
         
         var email = Email.Create(request.Email);
+        if (await _usersRepository.ExistsByEmailAsync(email, cancellationToken))
+        {
+            return Result<User>.Fail($"The email {email.Value} is already in use");
+        }
         var user = User.Create(TypedIdBase.New<UserId>(), userName, email);
         
         await _usersRepository.AddAsync(user, cancellationToken);
-        return Result<UserId>.Ok(user.Id);
+        return Result<User>.Ok(user);
     }
 }
