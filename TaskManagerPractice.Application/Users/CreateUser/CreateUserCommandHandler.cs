@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using TaskManagerPractice.Application.Shared;
+using TaskManagerPractice.Domain.SharedKernel;
 using TaskManagerPractice.Domain.Users;
 
 namespace TaskManagerPractice.Application.Users.CreateUser;
@@ -22,7 +23,7 @@ public class CreateUserCommandHandler: IRequestHandler<CreateUserCommand, Result
         }
         
         var email = Email.Create(request.Email);
-        var user = User.Create(new UserId(Guid.NewGuid()),userName, email);
+        var user = User.Create(TypedIdBase.New<UserId>(), userName, email);
         
         await _usersRepository.AddAsync(user, cancellationToken);
         return Result<UserId>.Ok(user.Id);

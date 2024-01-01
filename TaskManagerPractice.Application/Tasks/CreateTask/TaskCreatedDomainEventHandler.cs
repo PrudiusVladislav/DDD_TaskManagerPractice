@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using TaskManagerPractice.Domain.Tasks.Events;
-using TaskManagerPractice.Persistence;
 
 namespace TaskManagerPractice.Application.Tasks.CreateTask;
 

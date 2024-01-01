@@ -13,20 +13,24 @@ public class Task: Entity<TaskId>
     public string Description { get; private set; }
     public TaskState State { get; private set; }
     public TaskLifeRange LifeRange { get; private set; }
+    
+    // only for EF Core
+    private Task() { }
 
-    private Task(TaskId id, string name, UserId userId, string description, DateTime createdAt)
+    private Task(TaskId id, string name, UserId userId, string description, TaskState state, TaskLifeRange lifeRange)
     {
         Id = id;
         Name = name;
         UserId = userId;
         Description = description;
-        State = TaskState.InProgress;
-        LifeRange = TaskLifeRange.Create(createdAt)!;
+        State = state;
+        LifeRange = lifeRange;
     }
     
     public static Task Create(TaskId id, string name, UserId userId, string description, DateTime createdAt)
     {
-        var task = new Task(id, name, userId, description, createdAt);
+        var lifeRange = TaskLifeRange.Create(createdAt);
+        var task = new Task(id, name, userId, description, TaskState.InProgress, lifeRange);
         task.Raise(new TaskCreatedDomainEvent(Guid.NewGuid(), DateTime.UtcNow, id));
         return task;
     }

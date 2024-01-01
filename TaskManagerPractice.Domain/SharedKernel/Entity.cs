@@ -2,26 +2,27 @@
 
 namespace TaskManagerPractice.Domain.SharedKernel;
 
-public abstract class Entity<TId> where TId : TypedIdBase
+public abstract class Entity<TId> : IHasDomainEvents
+    where TId : TypedIdBase
 {
-    private readonly List<INotification> _domainEvents = [];
+    private readonly List<DomainEvent> _domainEvents = [];
     
     public TId Id { get; protected set; }
     
-    public IReadOnlyCollection<INotification> DomainEvents => 
+    public IReadOnlyCollection<DomainEvent> DomainEvents => 
         _domainEvents.AsReadOnly();
     
-    protected void Raise(INotification eventItem)
+    protected void Raise(DomainEvent eventItem)
     {
         _domainEvents.Add(eventItem);
     }
     
-    protected void RemoveDomainEvent(INotification eventItem)
+    protected void RemoveDomainEvent(DomainEvent eventItem)
     {
         _domainEvents.Remove(eventItem);
     }
     
-    protected void ClearDomainEvents()
+    public void ClearDomainEvents()
     {
         _domainEvents.Clear();
     }

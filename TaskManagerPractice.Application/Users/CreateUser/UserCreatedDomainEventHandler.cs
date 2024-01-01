@@ -7,6 +7,6 @@ public class UserCreatedDomainEventHandler: INotificationHandler<UserCreatedDoma
 {
     public async Task Handle(UserCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        
     }
 }

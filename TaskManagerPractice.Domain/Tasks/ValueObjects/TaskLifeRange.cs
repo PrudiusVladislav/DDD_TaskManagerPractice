@@ -12,7 +12,7 @@ public class TaskLifeRange
         CreatedAt = createdAt;
     }
     
-    public static TaskLifeRange? Create(DateTime createdAt)
+    public static TaskLifeRange Create(DateTime createdAt)
     {
         return new TaskLifeRange(createdAt);
     }

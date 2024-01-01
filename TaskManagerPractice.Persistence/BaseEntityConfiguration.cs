@@ -16,6 +16,6 @@ public abstract class BaseEntityConfiguration<TId, TEntity>: IEntityTypeConfigur
             id => id.Value,
             value => TypedIdBase.Create<TId>(value));
         
-        builder.Ignore(a => a.DomainEvents);
+        builder.Ignore(e => e.DomainEvents);
     }
 }
