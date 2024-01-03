@@ -1,26 +1,23 @@
 ﻿using System.Text.RegularExpressions;
-using TaskManagerPractice.Domain.Users.Exceptions;
+using TaskManagerPractice.Domain.SharedKernel.Result;
+using TaskManagerPractice.Domain.Users.Errors;
 
-namespace TaskManagerPractice.Domain.Users;
+namespace TaskManagerPractice.Domain.Users.ValueObjects;
 
 public partial record Email
 {
     private Email(string value) => Value = value;
-    public string Value { get; init; }
+    public string Value { get;}
     
-    public static Email Create(string value)
+    public static Result<Email> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-        {
-            throw InvalidEmailException.EmptyEmail();
-        }
+            return Result.Fail<Email>(EmailErrors.EmailIsEmpty);
         
         if (!EmailRegex().IsMatch(value))
-        {
-            throw InvalidEmailException.InvalidFormat();
-        }
+            return Result.Fail<Email>(EmailErrors.InvalidFormat);
         
-        return new Email(value);
+        return Result.Ok(new Email(value));
     }
 
     [GeneratedRegex(@"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")]

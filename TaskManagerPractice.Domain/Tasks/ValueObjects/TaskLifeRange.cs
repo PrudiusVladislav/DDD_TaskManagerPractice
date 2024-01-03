@@ -1,4 +1,6 @@
-﻿using TaskManagerPractice.Domain.Tasks.Exceptions;
+﻿using TaskManagerPractice.Domain.SharedKernel.Result;
+using TaskManagerPractice.Domain.Tasks.Errors;
+using TaskManagerPractice.Domain.Tasks.Errors;
 
 namespace TaskManagerPractice.Domain.Tasks.ValueObjects;
 
@@ -17,11 +19,12 @@ public class TaskLifeRange
         return new TaskLifeRange(createdAt);
     }
     
-    public void Complete(DateTime completedAt)
+    public Result Complete(DateTime completedAt)
     {
         if (CreatedAt > completedAt)
-            throw InvalidTaskLifeRangeException.CreatedAtGreaterThanCompletedAt();
+            return Result.Fail(TaskLifeRangeErrors.CreatedAtGreaterThanCompletedAt());
         
         CompletedAt = completedAt;
+        return Result.Ok();
     }
 }

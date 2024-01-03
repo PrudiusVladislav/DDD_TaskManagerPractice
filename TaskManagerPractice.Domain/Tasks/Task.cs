@@ -1,6 +1,7 @@
 ﻿using TaskManagerPractice.Domain.SharedKernel;
+using TaskManagerPractice.Domain.SharedKernel.Result;
 using TaskManagerPractice.Domain.Tasks.Events;
-using TaskManagerPractice.Domain.Tasks.Exceptions;
+using TaskManagerPractice.Domain.Tasks.Errors;
 using TaskManagerPractice.Domain.Tasks.ValueObjects;
 using TaskManagerPractice.Domain.Users;
 
@@ -31,34 +32,37 @@ public class Task: Entity<TaskId>
     {
         var lifeRange = TaskLifeRange.Create(createdAt);
         var task = new Task(id, name, userId, description, TaskState.InProgress, lifeRange);
-        task.Raise(new TaskCreatedDomainEvent(Guid.NewGuid(), DateTime.UtcNow, id));
+        task.Raise(new TaskCreatedDomainEvent(Guid.NewGuid(), DateTime.UtcNow, id, task.UserId));
         return task;
     }
     
-    public void Complete(DateTime completedAt)
+    public Result Complete(DateTime completedAt)
     {
         if (State != TaskState.InProgress)
-            throw TaskStateException.TaskNotInProgress();
+            return Result.Fail(TaskStateErrors.TaskNotInProgress);
         LifeRange.Complete(DateTime.Now);
         State = TaskState.Completed;
         Raise(new TaskCompletedDomainEvent(Guid.NewGuid(), DateTime.UtcNow, Id));
+        return Result.Ok();
     }
     
-    public void Cancel()
+    public Result Cancel()
     {
         if (State != TaskState.InProgress)
-            throw TaskStateException.TaskNotInProgress();
+            return Result.Fail(TaskStateErrors.TaskNotInProgress);
         State = TaskState.Canceled;
         Raise(new TaskCanceledDomainEvent(Guid.NewGuid(), DateTime.UtcNow, Id));
+        return Result.Ok();
     }
 
-    public void Update(Task task)
+    public Result Update(Task task)
     {
         if (State != TaskState.InProgress)
-            throw TaskStateException.TaskNotInProgress();
+            return Result.Fail(TaskStateErrors.TaskNotInProgress);
         Name = task.Name;
         Description = task.Description;
         Raise(new TaskUpdatedDomainEvent(Guid.NewGuid(), DateTime.UtcNow, Id));
+        return Result.Ok();
     }
 
 }

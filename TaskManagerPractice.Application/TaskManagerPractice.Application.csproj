@@ -11,4 +11,9 @@
       <ProjectReference Include="..\TaskManagerPractice.Persistence\TaskManagerPractice.Persistence.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Tasks\Commands\" />
+      <Folder Include="Users\Commands\" />
+    </ItemGroup>
+
 </Project>

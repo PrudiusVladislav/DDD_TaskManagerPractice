@@ -19,13 +19,13 @@ public class ErrorHandlingMiddleware: IMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        const HttpStatusCode code = HttpStatusCode.BadRequest;
+        const HttpStatusCode code = HttpStatusCode.InternalServerError;
 
         var result = JsonSerializer.Serialize(new {error = exception.Message});
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int) code;
 
-        return context.Response.WriteAsync(exception.Message);
+        return context.Response.WriteAsync(result);
     }
 }

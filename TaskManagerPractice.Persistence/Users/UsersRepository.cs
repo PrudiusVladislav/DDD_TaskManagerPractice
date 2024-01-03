@@ -50,14 +50,4 @@ public class UsersRepository: IUsersRepository
         _dbContext.Users.Remove(userToDelete);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
-    
-    public async Task<bool> ExistsByNameAsync(UserName userName, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Users.AnyAsync(x => x.Name == userName, cancellationToken);
-    }
-    
-    public async Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Users.AnyAsync(x => x.Email == email, cancellationToken);
-    }
 }

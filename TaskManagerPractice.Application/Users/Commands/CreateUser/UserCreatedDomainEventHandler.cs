@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TaskManagerPractice.Domain.Users.Events;
 
-namespace TaskManagerPractice.Application.Users.CreateUser;
+namespace TaskManagerPractice.Application.Users.Commands.CreateUser;
 
 public class UserCreatedDomainEventHandler: INotificationHandler<UserCreatedDomainEvent>
 {

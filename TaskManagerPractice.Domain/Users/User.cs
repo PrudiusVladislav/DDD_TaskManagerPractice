@@ -1,8 +1,9 @@
 ﻿using TaskManagerPractice.Domain.SharedKernel;
-using TaskManagerPractice.Domain.Tasks;
+using TaskManagerPractice.Domain.SharedKernel.Result;
 using TaskManagerPractice.Domain.Users.Events;
-using TaskManagerPractice.Domain.Users.Exceptions;
-using Task = TaskManagerPractice.Domain.Tasks.Task;
+using TaskManagerPractice.Domain.Users.Errors;
+using TaskManagerPractice.Domain.Users.ValueObjects;
+
 namespace TaskManagerPractice.Domain.Users;
 
 public class User: Entity<UserId>
@@ -24,9 +25,10 @@ public class User: Entity<UserId>
         return user;
     }
     
-    public void UpdateName(UserName name)
+    public Result UpdateName(UserName name)
     {
         Name = name;
+        return Result.Ok();
         //Raise(new UserNameUpdatedDomainEvent(Guid.NewGuid(), DateTime.UtcNow, Id, name));
     }
 }

@@ -1,4 +1,6 @@
 ﻿using TaskManagerPractice.Application.Tasks;
+using TaskManagerPractice.Application.Users;
+using TaskManagerPractice.Domain.Users;
 using Task = TaskManagerPractice.Domain.Tasks.Task;
 
 namespace TaskManagerPractice.Application.Shared;
@@ -16,4 +18,8 @@ public class Mapper: IMapper
             task.LifeRange.CompletedAt);
     }
     
+    public UserDto MapUserToUserDto(User user)
+    {
+        return new UserDto(user.Id.Value, user.Name.Value, user.Email.Value);
+    }
 }

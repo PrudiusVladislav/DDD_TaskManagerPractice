@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TaskManagerPractice.Application.Shared;
+using TaskManagerPractice.Domain.Tasks;
+using TaskManagerPractice.Domain.Users;
 
 namespace TaskManagerPractice.Application;
 
@@ -16,6 +18,8 @@ public static class DependencyInjection
         });
         
         services.AddTransient<IMapper, Mapper>();
+        services.AddTransient<UsersDomainService>();
+        services.AddTransient<TasksDomainService>();
         return services;
     }
 }
