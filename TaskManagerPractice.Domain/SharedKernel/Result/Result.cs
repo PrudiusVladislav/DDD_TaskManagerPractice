@@ -101,8 +101,8 @@ public class Result<T> : Result
         return this;
     }
     
-    public T Match(Func<T?, T> onSuccess, Func<IList<Error>, T> onFailure)
+    public R Match<R>(Func<T, R> onSuccess, Func<IList<Error>,R> onFailure)
     {
-        return IsSuccess ? onSuccess(Value) : onFailure(Errors!);
+        return IsSuccess ? onSuccess(Value!) : onFailure(Errors);
     }
 }

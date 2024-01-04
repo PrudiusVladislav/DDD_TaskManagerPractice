@@ -3,7 +3,7 @@ using TaskManagerPractice.Application.Users;
 using TaskManagerPractice.Domain.Users;
 using Task = TaskManagerPractice.Domain.Tasks.Task;
 
-namespace TaskManagerPractice.Application.Shared;
+namespace TaskManagerPractice.Application.Abstractions;
 
 public interface IMapper
 {

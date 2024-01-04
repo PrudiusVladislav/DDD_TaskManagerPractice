@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TaskManagerPractice.Application.Shared;
+using TaskManagerPractice.Application.Abstractions;
 using TaskManagerPractice.Domain.Tasks;
 using TaskManagerPractice.Domain.Tasks.ValueObjects;
 

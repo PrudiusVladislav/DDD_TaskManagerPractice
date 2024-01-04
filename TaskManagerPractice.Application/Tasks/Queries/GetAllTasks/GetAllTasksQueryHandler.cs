@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using MediatR;
-using TaskManagerPractice.Application.Shared;
+using TaskManagerPractice.Application.Abstractions;
 using TaskManagerPractice.Domain.Tasks;
 
 namespace TaskManagerPractice.Application.Tasks.Queries.GetAllTasks;

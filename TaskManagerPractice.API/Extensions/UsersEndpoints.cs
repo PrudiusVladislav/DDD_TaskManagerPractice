@@ -1,7 +1,9 @@
-﻿using System.Text.Json;
-using MediatR;
-using TaskManagerPractice.Application.Shared;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using TaskManagerPractice.Application.Abstractions;
 using TaskManagerPractice.Application.Users.Commands.CreateUser;
+using TaskManagerPractice.Application.Users.Login;
 using TaskManagerPractice.Application.Users.Queries.GetAllUsers;
 using TaskManagerPractice.Domain.Users;
 
@@ -22,7 +24,7 @@ public static class UsersEndpoints
         {
             var user = await repository.GetByIdAsync(new UserId(id), cancellationToken);
             return user is null ? Results.NotFound() : Results.Ok(mapper.MapUserToUserDto(user));
-        });
+        }).RequireAuthorization();
         
         app.MapPost("/users", async (CreateUserCommand command,
             IMediator mediator, CancellationToken cancellationToken) =>
@@ -30,9 +32,20 @@ public static class UsersEndpoints
             var result = await mediator.Send(command, cancellationToken);
 
             return result.Match<IResult>(
-                onFailure: errors => Results.BadRequest(errors.Select(e => 
-                        new {errorType = e.Type.ToString(), errorMessage = e.Message})),
-                onSuccess: () => Results.Created($"/users/{result.Value!.Value}", result.Value.Value));
+                onFailure: errors => ResultsMapper.MapFailureResult(errors),
+                onSuccess: () => Results.Created($"/users/{result.Value!.Value}",
+                    result.Value.Value));
+        });
+        
+        app.MapPost("/users/login", async ([FromBody]LoginRequest loginRequest, 
+            [FromServices]IMediator mediator, CancellationToken cancellationToken) =>
+        {
+            var command = new LoginCommand(loginRequest.Email);
+            var result = await mediator.Send(command, cancellationToken);
+
+            return result.Match<IResult>(
+                onFailure: errors => ResultsMapper.MapFailureResult(errors),
+                onSuccess: token => Results.Ok(token));
         });
     }
 }

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TaskManagerPractice.Application.Shared;
+using TaskManagerPractice.Application.Abstractions;
 using TaskManagerPractice.Application.Tasks.Commands.CreateTask;
 using TaskManagerPractice.Application.Tasks.Queries.GetAllTasks;
 using TaskManagerPractice.Application.Tasks.Queries.GetTaskById;

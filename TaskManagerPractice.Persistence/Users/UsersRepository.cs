@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManagerPractice.Domain.Users;
+using TaskManagerPractice.Domain.Users.ValueObjects;
 using Task = System.Threading.Tasks.Task;
 
 
@@ -49,5 +50,10 @@ public class UsersRepository: IUsersRepository
             return;
         _dbContext.Users.Remove(userToDelete);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    public async Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TaskManagerPractice.Application.Abstractions;
 using TaskManagerPractice.Domain.Tasks;
 using TaskManagerPractice.Domain.Users;
+using TaskManagerPractice.Persistence.Authentication;
 using TaskManagerPractice.Persistence.Interceptors;
 using TaskManagerPractice.Persistence.Tasks;
 using TaskManagerPractice.Persistence.Users;
@@ -22,7 +24,9 @@ public static class DependencyInjection
 
         services.AddTransient<IUsersRepository, UsersRepository>();
         services.AddTransient<ITasksRepository, TasksRepository>();
-        
+        services.AddTransient<IMapper, Mapper>();
+        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+        services.AddTransient<IJwtProvider, JwtProvider>();
         return services;
     }
 }
